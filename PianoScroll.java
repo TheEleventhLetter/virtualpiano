@@ -20,7 +20,52 @@ public class PianoScroll {
     private void setUpNoteBlocks(Pane pianoPane){
         for (int i = 0; i < 14; i++){
             for (int j = 0; j < 32; j++){
-                this.noteBlocks[i][j] = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane);
+                NoteBlock newNoteBlock = null;
+                switch (i){
+                    case 0:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "B4");
+                        break;
+                    case 1:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "A4");
+                        break;
+                    case 2:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "G4");
+                        break;
+                    case 3:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "F4");
+                        break;
+                    case 4:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "E4");
+                        break;
+                    case 5:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "D4");
+                        break;
+                    case 6:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "C4");
+                        break;
+                    case 7:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "B3");
+                        break;
+                    case 8:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "A3");
+                        break;
+                    case 9:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "G3");
+                        break;
+                    case 10:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "F3");
+                        break;
+                    case 11:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "E3");
+                        break;
+                    case 12:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "D3");
+                        break;
+                    case 13:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "C3");
+                        break;
+                }
+                this.noteBlocks[i][j] = newNoteBlock;
             }
         }
     }
@@ -43,15 +88,13 @@ public class PianoScroll {
     private void checkNotes(){
         for (int i = 0; i < 14; i++) {
             for (int j = 0; j < 32; j++) {
-                if (this.noteBlocks[i][j] != null) {
-                    NoteBlock currentBlock = this.noteBlocks[i][j];
-                    if (this.line.didCollide(currentBlock.getX(), currentBlock.getY(),
-                            Constants.NOTE_BLOCK_WIDTH, Constants.NOTE_BLOCK_HEIGHT) && currentBlock.getIsSelected()
-                            && !currentBlock.getWasPlayed()) {
-                        currentBlock.playSound();
-                        currentBlock.setWasPlayed();
+                NoteBlock currentBlock = this.noteBlocks[i][j];
+                if (this.line.didCollide(currentBlock.getX(), currentBlock.getY(),
+                        Constants.NOTE_BLOCK_WIDTH, Constants.NOTE_BLOCK_HEIGHT) && currentBlock.getIsSelected()
+                        && !currentBlock.getWasPlayed()) {
+                    currentBlock.playSound();
+                    currentBlock.setWasPlayed();
 
-                    }
                 }
             }
         }
@@ -59,10 +102,9 @@ public class PianoScroll {
     private void resetNotes(){
         for (int i = 0; i < 14; i++) {
             for (int j = 0; j < 32; j++) {
-                if (this.noteBlocks[i][j] != null) {
-                    this.noteBlocks[i][j].reset();
-                }
+                this.noteBlocks[i][j].reset();
             }
+
         }
     }
 
