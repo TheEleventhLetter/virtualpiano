@@ -5,17 +5,21 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 public class PianoScroll {
     private NoteBlock[][] noteBlocks;
     private ReplayLine line;
     private Timeline timeline;
-    public PianoScroll(Pane pianoPane){
+    private boolean isPlaying;
+    private Studio myStudio;
+    public PianoScroll(Pane pianoPane, Studio studio){
+        this.isPlaying = false;
         this.noteBlocks = new NoteBlock[16][32];
         this.setUpNoteBlocks(pianoPane);
         this.setUpTimeline();
-
+        this.myStudio = studio;
     }
     private void setUpNoteBlocks(Pane pianoPane){
         for (int i = 0; i < 14; i++){
@@ -23,46 +27,46 @@ public class PianoScroll {
                 NoteBlock newNoteBlock = null;
                 switch (i){
                     case 0:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "B4");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "B4", Color.PINK);
                         break;
                     case 1:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "A4");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "A4", Color.VIOLET);
                         break;
                     case 2:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "G4");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "G4", Color.DARKSEAGREEN);
                         break;
                     case 3:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "F4");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "F4", Color.LAWNGREEN);
                         break;
                     case 4:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "E4");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "E4", Color.YELLOW);
                         break;
                     case 5:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "D4");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "D4", Color.ORANGE);
                         break;
                     case 6:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "C4");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "C4", Color.RED);
                         break;
                     case 7:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "B3");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "B3", Color.PINK);
                         break;
                     case 8:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "A3");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "A3", Color.VIOLET);
                         break;
                     case 9:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "G3");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "G3", Color.DARKSEAGREEN);
                         break;
                     case 10:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "F3");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "F3", Color.LAWNGREEN);
                         break;
                     case 11:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "E3");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "E3", Color.YELLOW);
                         break;
                     case 12:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "D3");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "D3", Color.ORANGE);
                         break;
                     case 13:
-                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "C3");
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "C3", Color.RED);
                         break;
                 }
                 this.noteBlocks[i][j] = newNoteBlock;
@@ -70,9 +74,17 @@ public class PianoScroll {
         }
     }
     public void playScroll(Pane pianoPane){
-        this.line = new ReplayLine(pianoPane, this);
-        this.line.startTimeline();
-        this.timeline.play();
+        if (!this.isPlaying){
+            this.line = new ReplayLine(pianoPane, this, this.myStudio.getTempo());
+            this.line.startTimeline();
+            this.timeline.play();
+            this.isPlaying = true;
+        } else {
+            this.stopScroll(pianoPane);
+            this.line = new ReplayLine(pianoPane, this, this.myStudio.getTempo());
+            this.line.startTimeline();
+            this.timeline.play();
+        }
     }
     private void setUpTimeline(){
         KeyFrame kf1 = new KeyFrame(Duration.millis(1), (ActionEvent e) -> this.checkNotes());
@@ -80,10 +92,12 @@ public class PianoScroll {
         this.timeline.setCycleCount(Animation.INDEFINITE);
     }
     public void stopScroll(Pane pianoPane){
-        this.line.stopTimeline();
-        this.timeline.stop();
-        this.line.removeLine(pianoPane);
-        this.resetNotes();
+        if (this.line != null){
+            this.line.stopTimeline();
+            this.timeline.stop();
+            this.line.removeLine(pianoPane);
+            this.resetNotes();
+        }
     }
     private void checkNotes(){
         for (int i = 0; i < 14; i++) {
@@ -94,7 +108,6 @@ public class PianoScroll {
                         && !currentBlock.getWasPlayed()) {
                     currentBlock.playSound();
                     currentBlock.setWasPlayed();
-
                 }
             }
         }
@@ -106,6 +119,17 @@ public class PianoScroll {
             }
 
         }
+    }
+    public void setIsPlaying(){
+        this.isPlaying = false;
+    }
+    public void restartNotes(){
+        for (int i = 0; i < 14; i++) {
+            for (int j = 0; j < 32; j++) {
+                this.noteBlocks[i][j].clear();
+            }
+        }
+        this.resetNotes();
     }
 
 }

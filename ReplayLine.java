@@ -13,21 +13,24 @@ public class ReplayLine {
     private Line line;
     private Timeline timeline;
     private PianoScroll scroll;
-    public ReplayLine(Pane pianoPane, PianoScroll myScroll){
+    public ReplayLine(Pane pianoPane, PianoScroll myScroll, int tempo){
         this.line = new Line(0, 0, 0, Constants.SCENE_HEIGHT);
         this.line.setStroke(Color.RED);
         this.line.setStrokeWidth(4);
         pianoPane.getChildren().add(this.line);
-        this.setUpTimeLine(pianoPane);
+        this.setUpTimeLine(pianoPane, tempo);
         this.scroll = myScroll;
     }
     public void removeLine(Pane pianoPane){
         pianoPane.getChildren().remove(this.line);
     }
-    private void setUpTimeLine(Pane pianoPane){
-        KeyFrame kf1 = new KeyFrame(Duration.millis(20), (ActionEvent e) -> this.moveLine(pianoPane));
+    private void setUpTimeLine(Pane pianoPane, int tempo){
+        KeyFrame kf1 = new KeyFrame(Duration.millis(this.calculateMovementDuration(tempo)), (ActionEvent e) -> this.moveLine(pianoPane));
         this.timeline = new Timeline(kf1);
         this.timeline.setCycleCount(Animation.INDEFINITE);
+    }
+    private double calculateMovementDuration(int tempo){
+        return (60000.0 / tempo) / 15.0;
     }
     public void startTimeline(){
         this.timeline.play();
@@ -41,6 +44,7 @@ public class ReplayLine {
         if (this.line.getStartX() > Constants.SCENE_WIDTH){
             this.stopTimeline();
             this.scroll.stopScroll(pianoPane);
+            this.scroll.setIsPlaying();
         }
     }
     public boolean didCollide(int X, int Y, int width, int height){
