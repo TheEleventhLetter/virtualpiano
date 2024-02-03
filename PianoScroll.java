@@ -22,7 +22,7 @@ public class PianoScroll {
         this.myStudio = studio;
     }
     private void setUpNoteBlocks(Pane pianoPane){
-        for (int i = 0; i < 14; i++){
+        for (int i = 0; i < 16; i++){
             for (int j = 0; j < 32; j++){
                 NoteBlock newNoteBlock = null;
                 switch (i){
@@ -68,6 +68,12 @@ public class PianoScroll {
                     case 13:
                         newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "C3", Color.RED);
                         break;
+                    case 14:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "SNARE", Color.GRAY);
+                        break;
+                    case 15:
+                        newNoteBlock = new NoteBlock(j * Constants.NOTE_BLOCK_WIDTH, i * Constants.NOTE_BLOCK_HEIGHT, pianoPane, "BASS", Color.DARKGRAY);
+                        break;
                 }
                 this.noteBlocks[i][j] = newNoteBlock;
             }
@@ -100,7 +106,7 @@ public class PianoScroll {
         }
     }
     private void checkNotes(){
-        for (int i = 0; i < 14; i++) {
+        for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 32; j++) {
                 NoteBlock currentBlock = this.noteBlocks[i][j];
                 if (this.line.didCollide(currentBlock.getX(), currentBlock.getY(),
@@ -113,7 +119,7 @@ public class PianoScroll {
         }
     }
     private void resetNotes(){
-        for (int i = 0; i < 14; i++) {
+        for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 32; j++) {
                 this.noteBlocks[i][j].reset();
             }
@@ -124,7 +130,7 @@ public class PianoScroll {
         this.isPlaying = false;
     }
     public void restartNotes(){
-        for (int i = 0; i < 14; i++) {
+        for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 32; j++) {
                 this.noteBlocks[i][j].clear();
             }

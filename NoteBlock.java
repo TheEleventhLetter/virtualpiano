@@ -47,6 +47,8 @@ public class NoteBlock {
         this.noteSound.put("E3", "src/virtualpiano/E3_Sample.wav");
         this.noteSound.put("D3", "src/virtualpiano/D3_Sample.wav");
         this.noteSound.put("C3", "src/virtualpiano/C3_Sample.wav");
+        this.noteSound.put("SNARE", "src/virtualpiano/SnareHit_Sample.wav");
+        this.noteSound.put("BASS", "src/virtualpiano/BassHit_Sample.wav");
     }
     private void addNote(Color color){
         if (!this.noteSelected){
